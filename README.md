@@ -127,7 +127,8 @@ Options:
 
   --skip                           Number of messages to skip from the mbox
                                    file (default 0)
-                                   ```
+
+```
 
 ## <a id="help"></a>Help/Resources
 
