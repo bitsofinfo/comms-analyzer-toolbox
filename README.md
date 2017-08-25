@@ -62,7 +62,7 @@ Once Docker is available on your system, before you run `mbox-analyzer-toolbox` 
 
 9. Once save to your hard drive, you will want to unzip the file, once unzipped all of your exported mail from Gmail will live in an **mbox** export file in the `Takeout/Mail/` folder and the filename with all your mail is in: `All mail Including Spam and Trash.mbox`
 
-10. You should rename this file to something simpler like `my-gmail-email.mbox`
+10. You should rename this file to something simpler like `my-email.mbox`
 
 11. Take note of the location of your *.mbox* file as you will use it below when running the toolbox.
 
@@ -74,7 +74,7 @@ Bring up a terminal or command prompt on your computer and run the following, be
 
 ```
 docker run --rm -ti -p 5601:5601 \
-  -v PATH/TO/YOUR/email.mbox:/toolbox/email.mbox \
+  -v PATH/TO/YOUR/my-email.mbox:/toolbox/email.mbox \
   -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch-5.5.2/data \
   mbox-analyzer-toolbox:latest \
   python /toolbox/elasticsearch-gmail/src/index_emails.py \
