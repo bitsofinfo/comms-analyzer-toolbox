@@ -7,7 +7,9 @@ Docker image that provides a toolset for the import and analysis of email conten
 * [Example: Export from Gmail](#gmailexample)
 * [Running](#running)
 * [Toolbox options](#options)
+* [Expected warnings](#warn)
 * [Help/Resources](#help)
+* [Security/Privacy](#security)
 
 
 ## <a id="summary"></a> Summary
@@ -158,7 +160,7 @@ For hotmail/outlook, you need to export to PST, and then as a second step conver
 * [Kibana logz.io tutorial](https://logz.io/blog/kibana-tutorial/)
 * [Kibana search syntax](https://www.elastic.co/guide/en/kibana/current/search.html)
 
-## Expected warnings
+## <a id="warn"></a> Expected warnings
 
 In the log output you may see warnings/errors like the following.
 
@@ -172,3 +174,15 @@ They are expected and ok, they are simply warnings about some special characters
 [W 170825 18:41:56 dammit:381] Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER.
 ...
 ```
+
+## <a id="security"></a> Security/Privacy
+
+Using this tool is completely local to whatever machine you are running this tool on (i.e. your Docker host). In the case of running it on your laptop or desktop computer its 100% local.
+
+Data is not uploaded or transferred anywhere.
+
+The data does not go anywhere other than on disk locally to the Docker host this is running on.
+
+To completely remove the data analyzed, you can `docker rm -f [container-id]` of the `mbox-analyzer-toolbox` container running on your machine.
+
+If you mounted the elasticsearch data directory via a volume on the host (i.e. `-v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch-5.5.2/data`) that locally directory is where all the indexed data resides locally on disk.
