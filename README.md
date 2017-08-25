@@ -1,6 +1,6 @@
 # mbox-analyzer-toolbox
 
-Docker image that provides a toolset for the import and analysis of email content from [MBOX](https://en.wikipedia.org/wiki/Mbox) export files using Elasticsearch and Kibana
+Docker image that provides a simplified toolset for the import and analysis of email content from [MBOX](https://en.wikipedia.org/wiki/Mbox) export files using Elasticsearch and Kibana. This provides a single command that launches a full analytical software stack as well as imports all of your email into it, ready for analysis w/ Kibana and ElasticSearch.
 
 * [Summary](#summary)
 * [Docker setup](#dockersetup)
