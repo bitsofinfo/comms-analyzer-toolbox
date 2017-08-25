@@ -82,6 +82,8 @@ docker run --rm -ti -p 5601:5601 \
 
 The console will log output of what is going on, when the system is booted up you can bring up a web browser on your desktop and go to *http://localhost:5601* to start using Kibana to analyze your email.
 
+On the first screen that says `Configure an index pattern`, in the field labeled `Index name or pattern` you type `mbox` you will then see the `date_ts` field auto-selected, then hit the `Create` button. From there Kibana is ready to use!
+
 Launching does several things in the following order
 
 1. Starts ElasticSearch (where your indexed emails are stored)
