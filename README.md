@@ -142,6 +142,7 @@ Options:
 For hotmail/outlook, you need to export to PST, and then as a second step convert to MBOX
 
 * https://support.microsoft.com/en-us/help/980534/export-windows-live-mail-email--contacts--and-calendar-data-to-outlook
+* https://gallery.technet.microsoft.com/Convert-PST-to-MBOX-25f4bb0e
 * http://www.hotmail.googleapps--backup.com/pst
 * https://steemit.com/hotmail/@ariyantoooo/how-to-export-hotmail-to-pst
 * http://www.techhit.com/outlook/convert_outlook_mbox.html
