@@ -18,7 +18,18 @@ This project manages a Dockerfile to produce an image that when run starts both 
 
 For every email message in your MBOX file, each message becomes a separate document in ElasticSearch where all email headers are indexed as individual fields and all body content indexed and stripped of html/css/js.
 
-From there... you can analyze and visualize practically anything about your email. Enjoy.
+For example, each email imported into the index has the following fields available for searching and analysis in Kibana (plus many, many more)
+
+* date_ts (timestamp in GMT/UTC)
+* to
+* from
+* cc
+* bcc
+* subject
+* body
+* body_size
+
+From there... well, you can analyze and visualize practically anything about your email. Enjoy.
 
 
 ![Diag1](/docs/diag1.png "Diagram1")
