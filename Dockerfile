@@ -25,7 +25,7 @@ RUN cd /toolbox && \
     rm -rf kibana-5.5.2-linux-x86_64.tar.gz && \
     chown -R elasticsearch kibana-5.5.2-linux-x86_64
 
-RUN cd /toolbox && git clone https://github.com/bitsofinfo/elasticsearch-gmail.git
+RUN cd /toolbox && git clone https://github.com/oliver006/elasticsearch-gmail.git
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh

@@ -14,7 +14,7 @@ Docker image that provides a simplified toolset for the import and analysis of e
 
 ## <a id="summary"></a> Summary
 
-This project manages a Dockerfile to produce an image that when run starts both ElasticSearch and Kibana and then imports all data using a [fork](https://github.com/bitsofinfo/elasticsearch-gmail) of the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) python scripts which import email data from an MBOX file. (usage of fork pending inclusion of [PR9](https://github.com/oliver006/elasticsearch-gmail/pull/9))
+This project manages a Dockerfile to produce an image that when run starts both ElasticSearch and Kibana and then imports all data using the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) python scripts which import email data from an MBOX file. 
 
 For every email message in your MBOX file, each message becomes a separate document in ElasticSearch where all email headers are indexed as individual fields and all body content indexed and stripped of html/css/js.
 
