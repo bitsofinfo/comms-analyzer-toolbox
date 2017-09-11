@@ -57,6 +57,9 @@ echo "you will then see the 'date_ts' field auto-selected, then hit the 'Create'
 echo ""
 echo "Kibana 5 tutorial: https://www.youtube.com/watch?v=mMhnGjp8oOI"
 echo ""
+echo "Note: if running docker toolbox; 'localhost' above might not work, execute a 'docker-machine env default'"
+echo "to determine your docker hosts IP address, then go to http://[machine-ip]:5601"
+echo
 echo "To quit the entire engine type ^C (cntrl C)"
 echo ""
 

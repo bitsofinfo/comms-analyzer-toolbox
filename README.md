@@ -117,7 +117,7 @@ docker run --rm -ti -p 5601:5601 \
   --index-name=mbox
 ```
 
-The console will log output of what is going on, when the system is booted up you can bring up a web browser on your desktop and go to *http://localhost:5601* to start using Kibana to analyze your email.
+The console will log output of what is going on, when the system is booted up you can bring up a web browser on your desktop and go to *http://localhost:5601* to start using Kibana to analyze your data. *Note: if running docker toolbox; 'localhost' might not work, execute a `docker-machine env default` to determine your docker hosts IP address, then go to http://[machine-ip]:5601"*
 
 On the first screen that says `Configure an index pattern`, in the field labeled `Index name or pattern` you type `mbox` you will then see the `date_ts` field auto-selected, then hit the `Create` button. From there Kibana is ready to use!
 
