@@ -54,6 +54,24 @@ Once Docker is installed bring up a command line shell and type the following to
 docker build -t mbox-analyzer-toolbox .
 ```
 
+**Docker toolbox for Windows notes**
+
+The `default` docker machine VM created is likely to underpowered to run this out of the box. You will need to do the following to increase the CPU and memory of the local virtual-box machine
+
+1. Bring up a "Docker Quickstart Terminal"
+
+2. Remove the default machine: `docker-machine rm default`
+
+3. Recreate it: `docker-machine create -d virtualbox --virtualbox-cpu-count=[N cpus] --virtualbox-memory=[XXXX megabytes] --virtualbox-disk-size=[XXXXXX] default`
+
+**Troubleshooting error: "max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]"**
+
+If you see this error when starting the toolbox (the error is reported from Elasticsearch) you will need do the following on the docker host the container is being launched on.
+
+`sysctl -w vm.max_map_count=262144`
+
+If you are using Docker Toolbox, you have to first shell into the boot2docker VM first with `docker ssh default` to run this command.
+
 ## <a id="gmailexample"></a>Example: export Gmail email to mbox file
 
 Once Docker is available on your system, before you run `mbox-analyzer-toolbox` you need to have some email to analyze in MBOX format. As an example, below is how to export email from Gmail.
