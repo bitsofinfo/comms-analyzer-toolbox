@@ -105,10 +105,12 @@ Before running the example below, you need [Docker](#dockersetup) installed.
 
 Bring up a terminal or command prompt on your computer and run the following, before doing so, you need to replace `PATH/TO/YOUR/email.mbox` and `PATH/TO/ELASTICSEARCH_DATA_DIR` below with the proper paths on your local system as appropriate.
 
+*Note: if using Docker Toolbox for Windows*: Both the elasticsearch data dir and your mbox folder should live somewhere under your home directory under `c:\Users\[your username]\...` due to permissions issues.
+
 ```
 docker run --rm -ti -p 5601:5601 \
   -v PATH/TO/YOUR/my-email.mbox:/toolbox/email.mbox \
-  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch-5.5.2/data \
+  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
   mbox-analyzer-toolbox:latest \
   python /toolbox/elasticsearch-gmail/src/index_emails.py \
   --infile=/toolbox/email.mbox \
@@ -143,8 +145,7 @@ toolbox so you can analyze previously imported data that resides in elasticsearc
 
 ```
 docker run --rm -ti -p 5601:5601 \
-  -v PATH/TO/YOUR/my-email.mbox:/toolbox/email.mbox \
-  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch-5.5.2/data \
+  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
   mbox-analyzer-toolbox:latest \
   analyze-only
 ```
@@ -234,4 +235,4 @@ The data does not go anywhere other than on disk locally to the Docker host this
 
 To completely remove the data analyzed, you can `docker rm -f [container-id]` of the `mbox-analyzer-toolbox` container running on your machine.
 
-If you mounted the elasticsearch data directory via a volume on the host (i.e. `-v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch-5.5.2/data`) that locally directory is where all the indexed data resides locally on disk.
+If you mounted the elasticsearch data directory via a volume on the host (i.e. `-v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data`) that locally directory is where all the indexed data resides locally on disk.

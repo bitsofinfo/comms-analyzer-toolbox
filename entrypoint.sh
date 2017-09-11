@@ -3,16 +3,16 @@
 echo
 echo "Starting ElasticSearch.... please wait"
 echo
-su -c "nohup /toolbox/elasticsearch-5.5.2/bin/elasticsearch -d -Enetwork.host=0.0.0.0 &>/toolbox/elasticsearch-5.5.2/elasticsearch.log &" -s /bin/bash elasticsearch
+su -c "nohup /toolbox/elasticsearch/bin/elasticsearch -d -Enetwork.host=0.0.0.0 &>/toolbox/elasticsearch/elasticsearch.log &" -s /bin/bash elasticsearch
 sleep 10
-timeout 30 tail -f /toolbox/elasticsearch-5.5.2/logs/elasticsearch.log
+timeout 30 tail -f /toolbox/elasticsearch/logs/elasticsearch.log
 
 echo
 echo "Starting Kibana....please wait"
 echo
-su -c "nohup /toolbox/kibana-5.5.2-linux-x86_64/bin/kibana -c /toolbox/kibana.yml &>/toolbox/kibana-5.5.2-linux-x86_64/kibana.log &" -s /bin/bash elasticsearch
+su -c "nohup /toolbox/kibana/bin/kibana -c /toolbox/kibana.yml &>/toolbox/kibana/kibana.log &" -s /bin/bash elasticsearch
 sleep 5
-timeout 30 tail -f /toolbox/kibana-5.5.2-linux-x86_64/kibana.log
+timeout 30 tail -f /toolbox/kibana/kibana.log
 
 
 set -e
