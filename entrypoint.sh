@@ -40,6 +40,7 @@ elif [[ "$command" == "analyze-only" ]]; then
   echo
 
 else
+  echo
 	echo "WARN: You should start with one of the following commands: "
   echo "   1. 'python /toolbox/elasticsearch-gmail/src/index_emails.py'";
   echo "   2. 'analyze-only' (default)";
