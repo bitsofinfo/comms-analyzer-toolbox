@@ -46,7 +46,7 @@ Before running the example below, you need [Docker](https://www.docker.com/get-d
 * [Docker Toolbox for Windows 10+ home or earlier versions](https://www.docker.com/products/docker-toolbox)
 * [Docker for Windows 10+ pro, enterprise, hyper-v capable..](https://www.docker.com/docker-windows)
 
-**Windows Note**: When you `git clone` this project on Windows prior to building be sure to add the git clone flag `--config core.autocrlf=input`. Example `git clone https://github.com/bitsofinfo/mbox-analyzer-toolbox.git --config core.autocrlf=input`. [http://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/](read more here)
+**Windows Note**: When you `git clone` this project on Windows prior to building be sure to add the git clone flag `--config core.autocrlf=input`. Example `git clone https://github.com/bitsofinfo/mbox-analyzer-toolbox.git --config core.autocrlf=input`. [read more here](http://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/)
 
 Once Docker is installed bring up a command line shell and type the following to build the docker image for the toolbox:
 
