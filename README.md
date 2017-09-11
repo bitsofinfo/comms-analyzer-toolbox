@@ -5,7 +5,8 @@ Docker image that provides a simplified toolset for the import and analysis of e
 * [Summary](#summary)
 * [Docker setup](#dockersetup)
 * [Example: Export from Gmail](#gmailexample)
-* [Running](#running)
+* [Running to import emails](#running)
+* [Running to analyze previously imported emails](#analyzeonly)
 * [Toolbox options](#options)
 * [Expected warnings](#warn)
 * [Help/Resources](#help)
@@ -14,7 +15,7 @@ Docker image that provides a simplified toolset for the import and analysis of e
 
 ## <a id="summary"></a> Summary
 
-This project manages a Dockerfile to produce an image that when run starts both ElasticSearch and Kibana and then imports all data using the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) python scripts which import email data from an MBOX file. 
+This project manages a Dockerfile to produce an image that when run starts both ElasticSearch and Kibana and then imports all data using the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) python scripts which import email data from an MBOX file.
 
 For every email message in your MBOX file, each message becomes a separate document in ElasticSearch where all email headers are indexed as individual fields and all body content indexed and stripped of html/css/js.
 
@@ -98,7 +99,7 @@ Once Docker is available on your system, before you run `mbox-analyzer-toolbox` 
 
 11. Take note of the location of your *.mbox* file as you will use it below when running the toolbox.
 
-## <a id="running"></a>Running the toolbox
+## <a id="running"></a>Running: import emails for analysis
 
 Before running the example below, you need [Docker](#dockersetup) installed.
 
@@ -134,6 +135,20 @@ When then mbox importer is running you will see the following entries in the log
 [I 170825 18:48:23 index_emails:96] Upload: OK - upload took:  287ms, total messages uploaded:   2000
 ...
 ```
+
+## <a id="analyzeonly"></a>Running: analyze previously imported emails
+
+Running in this mode will just launch elasticsearch and kibana and will not import anything. It just brings up the
+toolbox so you can analyze previously imported data that resides in elasticsearch.
+
+```
+docker run --rm -ti -p 5601:5601 \
+  -v PATH/TO/YOUR/my-email.mbox:/toolbox/email.mbox \
+  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch-5.5.2/data \
+  mbox-analyzer-toolbox:latest \
+  analyze-only
+```
+
 
 ## <a id="options"></a>Toolbox options
 

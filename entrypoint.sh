@@ -21,25 +21,34 @@ set -e
 command="$1"
 script="$2"
 
-if [[ "$command" == "python" && "$script" == "/toolbox/elasticsearch-gmail/src/index_emails.py" ]];
-then
+if [[ "$command" == "python" && "$script" == "/toolbox/elasticsearch-gmail/src/index_emails.py" ]]; then
   echo
 	echo "Launching Email Indexer....";
   echo
+
+  # launch it!
+  args=( "$@" )
+  python /toolbox/elasticsearch-gmail/src/index_emails.py ${args[@]:2}
+
+  echo ""
+  echo "Email index is complete!"
+  echo ""
+
+elif [[ "$command" == "analyze-only" ]]; then
+  echo
+	echo "System started in analyze-only mode";
+  echo
+
 else
-	echo "ERROR: command must start with: python /toolbox/elasticsearch-gmail/src/index_emails.py";
-	exit 1;
+	echo "WARN: You should start with one of the following commands: "
+  echo "   1. 'python /toolbox/elasticsearch-gmail/src/index_emails.py'";
+  echo "   2. 'analyze-only' (default)";
+
+  echo
+  echo "System started in analyze-only mode";
+  echo
 fi
 
-
-# launch it!
-args=( "$@" )
-python /toolbox/elasticsearch-gmail/src/index_emails.py ${args[@]:2}
-
-
-echo ""
-echo "Email index is complete!"
-echo ""
 echo "In your web browser go to http://localhost:5601"
 echo ""
 echo "On the first screen that says 'Configure an index pattern', in the field labeled 'Index name or pattern' type 'mbox'"
