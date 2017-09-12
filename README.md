@@ -41,12 +41,12 @@ Before running the example below, you need [Docker](https://www.docker.com/get-d
 * [Docker Toolbox for Windows 10+ home or earlier versions](https://www.docker.com/products/docker-toolbox)
 * [Docker for Windows 10+ pro, enterprise, hyper-v capable](https://www.docker.com/docker-windows)
 
-**Windows Note**: When you `git clone` this project on Windows prior to building be sure to add the git clone flag `--config core.autocrlf=input`. Example `git clone https://github.com/bitsofinfo/mbox-analyzer-toolbox.git --config core.autocrlf=input`. [read more here](http://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/)
+**Windows Note**: When you `git clone` this project on Windows prior to building be sure to add the git clone flag `--config core.autocrlf=input`. Example `git clone https://github.com/bitsofinfo/comms-analyzer-toolbox.git --config core.autocrlf=input`. [read more here](http://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/)
 
 Once Docker is installed bring up a command line shell and type the following to build the docker image for the toolbox:
 
 ```
-docker build -t mbox-analyzer-toolbox .
+docker build -t comms-analyzer-toolbox .
 ```
 
 **Docker toolbox for Windows notes**
@@ -84,7 +84,7 @@ For example, each email imported into the index has the following fields availab
 
 ## <a id="gmailexample"></a>Example: export Gmail email to mbox file
 
-Once Docker is available on your system, before you run `mbox-analyzer-toolbox` you need to have some email to analyze in MBOX format. As an example, below is how to export email from Gmail.
+Once Docker is available on your system, before you run `comms-analyzer-toolbox` you need to have some email to analyze in MBOX format. As an example, below is how to export email from Gmail.
 
 1. Login to your gmail account with a web-browser on a computer
 
@@ -121,7 +121,7 @@ Bring up a terminal or command prompt on your computer and run the following, be
 docker run --rm -ti -p 5601:5601 \
   -v PATH/TO/YOUR/my-email.mbox:/toolbox/email.mbox \
   -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
-  mbox-analyzer-toolbox:latest \
+  comms-analyzer-toolbox:latest \
   python /toolbox/elasticsearch-gmail/src/index_emails.py \
   --infile=/toolbox/email.mbox \
   --init=[True | False] \
@@ -152,7 +152,7 @@ When then mbox importer is running you will see the following entries in the log
 
 ## <a id="mboxoptions"></a>Toolbox MBOX import options
 
-When running the `mbox-analyzer-toolbox` image, one of the arguments is to invoke the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
+When running the `comms-analyzer-toolbox` image, one of the arguments is to invoke the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
 
 ```
 Usage: /toolbox/elasticsearch-gmail/src/index_emails.py [OPTIONS]
@@ -226,7 +226,7 @@ For example, each line in the CSV data file below (text messages from an iphone)
 
 # <a id="iphoneexample"></a>Example: Export text messages from Iphone
 
-Once Docker is available on your system, before you run `mbox-analyzer-toolbox` you need to have some data to analyze in CSV format. As an example, below is how to export text messages from an iphone to a CSV file.
+Once Docker is available on your system, before you run `comms-analyzer-toolbox` you need to have some data to analyze in CSV format. As an example, below is how to export text messages from an iphone to a CSV file.
 
 1. Export iphone messages using [iExplorer for mac or windows](https://macroplant.com/iexplorer/tutorials/how-to-transfer-and-backup-sms-and-imessages)
 
@@ -271,7 +271,7 @@ docker run --rm -ti -p 5601:5601 \
   -v PATH/TO/YOUR/data.csv:/toolbox/data.csv \
   -v PATH/TO/YOUR/csvdata.mapping.json:/toolbox/csvdata.mapping.json \
   -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
-  mbox-analyzer-toolbox:latest \
+  comms-analyzer-toolbox:latest \
   python /toolbox/csv2es/csv2es.py \
     [--existing-index \]
     [--delete-index \]
@@ -301,7 +301,7 @@ When then mbox importer is running you will see the following entries in the log
 
 ## <a id="csvoptions"></a>Toolbox CSV import options
 
-When running the `mbox-analyzer-toolbox` image, one of the arguments is to invoke the [csv2es](https://github.com/bitsofinfo/csv2es) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
+When running the `comms-analyzer-toolbox` image, one of the arguments is to invoke the [csv2es](https://github.com/bitsofinfo/csv2es) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
 
 ```
 Usage: /toolbox/csv2es/csv2es.py [OPTIONS]
@@ -360,7 +360,7 @@ toolbox so you can analyze previously imported data that resides in elasticsearc
 ```
 docker run --rm -ti -p 5601:5601 \
   -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
-  mbox-analyzer-toolbox:latest \
+  comms-analyzer-toolbox:latest \
   analyze-only
 ```
 
@@ -401,6 +401,6 @@ Data is not uploaded or transferred anywhere.
 
 The data does not go anywhere other than on disk locally to the Docker host this is running on.
 
-To completely remove the data analyzed, you can `docker rm -f [container-id]` of the `mbox-analyzer-toolbox` container running on your machine.
+To completely remove the data analyzed, you can `docker rm -f [container-id]` of the `comms-analyzer-toolbox` container running on your machine.
 
 If you mounted the elasticsearch data directory via a volume on the host (i.e. `-v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data`) that locally directory is where all the indexed data resides locally on disk.
