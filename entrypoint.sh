@@ -23,7 +23,7 @@ script="$2"
 
 if [[ "$command" == "python" && "$script" == "/toolbox/elasticsearch-gmail/src/index_emails.py" ]]; then
   echo
-	echo "Launching Email Indexer....";
+	echo "Launching MBOX email indexer....";
   echo
 
   # launch it!
@@ -31,7 +31,19 @@ if [[ "$command" == "python" && "$script" == "/toolbox/elasticsearch-gmail/src/i
   python /toolbox/elasticsearch-gmail/src/index_emails.py ${args[@]:2}
 
   echo ""
-  echo "Email index is complete!"
+  echo "MBOX email indexing is complete!"
+  echo ""
+
+elif [[ "$command" == "python" && "$script" == "/toolbox/csv2es/csv2es.py" ]]; then
+  echo
+	echo "Launching CSV indexer....";
+  echo
+
+  args=( "$@" )
+  python /toolbox/csv2es/csv2es.py ${args[@]:2}
+
+  echo ""
+  echo "CSV indexing is complete!"
   echo ""
 
 elif [[ "$command" == "analyze-only" ]]; then
@@ -43,6 +55,7 @@ else
   echo
 	echo "WARN: You should start with one of the following commands: "
   echo "   1. 'python /toolbox/elasticsearch-gmail/src/index_emails.py'";
+  echo "   2. 'python /toolbox/csv2es/csv2es.py'";
   echo "   2. 'analyze-only' (default)";
 
   echo

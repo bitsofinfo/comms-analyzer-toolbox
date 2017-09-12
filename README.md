@@ -1,43 +1,37 @@
-# mbox-analyzer-toolbox
+# comms-analyzer-toolbox
 
-Docker image that provides a simplified toolset for the import and analysis of email content from [MBOX](https://en.wikipedia.org/wiki/Mbox) export files using Elasticsearch and Kibana. This provides a single command that launches a full analytical software stack as well as imports all of your email into it, ready for analysis w/ Kibana and ElasticSearch.
+Docker image that provides a simplified toolset for the import and analysis of communications content from email [MBOX](https://en.wikipedia.org/wiki/Mbox) files, and other CSV data (such as text messages) using Elasticsearch and Kibana. This provides a single command that launches a full analytical software stack as well as imports all of your communications into it, ready for analysis w/ Kibana and ElasticSearch.
 
 * [Summary](#summary)
 * [Docker setup](#dockersetup)
-* [Example: Export from Gmail](#gmailexample)
-* [Running to import emails](#running)
-* [Running to analyze previously imported emails](#analyzeonly)
-* [Toolbox options](#options)
+* Importing email from MBOX files
+  * [MBOX import summary](#mboxsummary)
+  * [Example: Export from Gmail](#gmailexample)
+  * [Example: Import emails from MBOX export file](#runningmbox)
+  * [MBOX import options](#mboxoptions)
+  * [Troubleshooting](#mboxwarn)
+* Importing data from CSV files
+  * [CSV import summary](#csvsummary)
+  * [Example: Export text messages from Iphone](#iphoneexample)
+  * [Example: Import text messages from CSV data file](#runningcsv)
+  * [CSV import options](#csvoptions)
+* [Analyze previously imported data](#analyzeonly)
 * [Expected warnings](#warn)
 * [Help/Resources](#help)
 * [Security/Privacy](#security)
 
-
 ## <a id="summary"></a> Summary
 
-This project manages a Dockerfile to produce an image that when run starts both ElasticSearch and Kibana and then imports all data using the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) python scripts which import email data from an MBOX file.
+This project manages a Dockerfile to produce an image that when run starts both ElasticSearch and Kibana and then optionally imports communications data using the the following tools bundled within the container:
 
-For every email message in your MBOX file, each message becomes a separate document in ElasticSearch where all email headers are indexed as individual fields and all body content indexed and stripped of html/css/js.
+* [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) python scripts which import email data from an MBOX file.
+* [csv2es](https://github.com/bitsofinfo/csv2es) python scripts which can import any data from an CSV file.
 
-For example, each email imported into the index has the following fields available for searching and analysis in Kibana (plus many, many more)
-
-* date_ts (timestamp in GMT/UTC)
-* to
-* from
-* cc
-* bcc
-* subject
-* body
-* body_size
-
-From there... well, you can analyze and visualize practically anything about your email. Enjoy.
-
+From there... well, you can analyze and visualize practically anything about your communications. Enjoy.
 
 ![Diag1](/docs/diag1.png "Diagram1")
 
 ![Diag2](/docs/diag2.png "Diagram2")
-
-
 
 ## <a id="dockersetup"></a>Docker setup
 
@@ -45,7 +39,7 @@ Before running the example below, you need [Docker](https://www.docker.com/get-d
 
 * [Docker for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac)
 * [Docker Toolbox for Windows 10+ home or earlier versions](https://www.docker.com/products/docker-toolbox)
-* [Docker for Windows 10+ pro, enterprise, hyper-v capable..](https://www.docker.com/docker-windows)
+* [Docker for Windows 10+ pro, enterprise, hyper-v capable](https://www.docker.com/docker-windows)
 
 **Windows Note**: When you `git clone` this project on Windows prior to building be sure to add the git clone flag `--config core.autocrlf=input`. Example `git clone https://github.com/bitsofinfo/mbox-analyzer-toolbox.git --config core.autocrlf=input`. [read more here](http://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/)
 
@@ -73,6 +67,21 @@ If you see this error when starting the toolbox (the error is reported from Elas
 
 If you are using Docker Toolbox, you have to first shell into the boot2docker VM first with `docker ssh default` to run this command.
 
+## <a id="mboxsummary"></a>MBOX import summary
+
+For every email message in your MBOX file, each message becomes a separate document in ElasticSearch where all email headers are indexed as individual fields and all body content indexed and stripped of html/css/js.
+
+For example, each email imported into the index has the following fields available for searching and analysis in Kibana (plus many, many more)
+
+* date_ts (epoch_millis timestamp in GMT/UTC)
+* to
+* from
+* cc
+* bcc
+* subject
+* body
+* body_size
+
 ## <a id="gmailexample"></a>Example: export Gmail email to mbox file
 
 Once Docker is available on your system, before you run `mbox-analyzer-toolbox` you need to have some email to analyze in MBOX format. As an example, below is how to export email from Gmail.
@@ -99,13 +108,14 @@ Once Docker is available on your system, before you run `mbox-analyzer-toolbox` 
 
 11. Take note of the location of your *.mbox* file as you will use it below when running the toolbox.
 
-## <a id="running"></a>Running: import emails for analysis
+
+## <a id="runningmbox"></a>Running: import emails for analysis
 
 Before running the example below, you need [Docker](#dockersetup) installed.
 
 Bring up a terminal or command prompt on your computer and run the following, before doing so, you need to replace `PATH/TO/YOUR/email.mbox` and `PATH/TO/ELASTICSEARCH_DATA_DIR` below with the proper paths on your local system as appropriate.
 
-*Note: if using Docker Toolbox for Windows*: Both the elasticsearch data dir and your mbox folder should live somewhere under your home directory under `c:\Users\[your username]\...` due to permissions issues.
+*Note: if using Docker Toolbox for Windows*: All of the mounted volumes below should live somewhere under your home directory under `c:\Users\[your username]\...` due to permissions issues.
 
 ```
 docker run --rm -ti -p 5601:5601 \
@@ -114,14 +124,16 @@ docker run --rm -ti -p 5601:5601 \
   mbox-analyzer-toolbox:latest \
   python /toolbox/elasticsearch-gmail/src/index_emails.py \
   --infile=/toolbox/email.mbox \
-  --init=True \
+  --init=[True | False] \
   --index-bodies=True \
-  --index-name=mbox
+  --index-name=comm_data
 ```
+
+Setting `--init=True` will delete and re-create the `comm_data` index. Setting `--init=False` will retain whatever data already exists
 
 The console will log output of what is going on, when the system is booted up you can bring up a web browser on your desktop and go to *http://localhost:5601* to start using Kibana to analyze your data. *Note: if running docker toolbox; 'localhost' might not work, execute a `docker-machine env default` to determine your docker hosts IP address, then go to http://[machine-ip]:5601"*
 
-On the first screen that says `Configure an index pattern`, in the field labeled `Index name or pattern` you type `mbox` you will then see the `date_ts` field auto-selected, then hit the `Create` button. From there Kibana is ready to use!
+On the first screen that says `Configure an index pattern`, in the field labeled `Index name or pattern` you type `comm_data` you will then see the `date_ts` field auto-selected, then hit the `Create` button. From there Kibana is ready to use!
 
 Launching does several things in the following order
 
@@ -138,22 +150,9 @@ When then mbox importer is running you will see the following entries in the log
 ...
 ```
 
-## <a id="analyzeonly"></a>Running: analyze previously imported emails
+## <a id="mboxoptions"></a>Toolbox MBOX import options
 
-Running in this mode will just launch elasticsearch and kibana and will not import anything. It just brings up the
-toolbox so you can analyze previously imported data that resides in elasticsearch.
-
-```
-docker run --rm -ti -p 5601:5601 \
-  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
-  mbox-analyzer-toolbox:latest \
-  analyze-only
-```
-
-
-## <a id="options"></a>Toolbox options
-
-At the core of the `mbox-analyzer-toolbox` image, is the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
+When running the `mbox-analyzer-toolbox` image, one of the arguments is to invoke the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
 
 ```
 Usage: /toolbox/elasticsearch-gmail/src/index_emails.py [OPTIONS]
@@ -184,12 +183,195 @@ Options:
 
 ```
 
-## <a id="help"></a>Help/Resources
+## <a id="mboxwarn"></a> MBOX import expected warnings
 
+When importing MBOX email data, in the log output you may see warnings/errors like the following.
+
+They are expected and ok, they are simply warnings about some special characters that are not able to be decoded etc.
+
+```
+...
+/usr/lib/python2.7/site-packages/bs4/__init__.py:282: UserWarning: "https://someurl.com/whatever" looks like a URL. Beautiful Soup is not an HTTP client. You should probably use an HTTP client like requests to get the document behind the URL, and feed that document to Beautiful Soup.
+  ' that document to Beautiful Soup.' % decoded_markup
+[W 170825 18:41:56 dammit:381] Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER.
+[W 170825 18:41:56 dammit:381] Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER.
+...
+```
+
+
+## <a id="csvsummary"></a>CSV import summary
+
+The CSV import tool `csv2es` embedded in the toolbox can import ANY CSV file, not just this example format below.
+
+For every row of data in a CSV file, each row becomes a separate document in ElasticSearch where all CSV columns are indexed as individual fields
+
+For example, each line in the CSV data file below (text messages from an iphone) imported into the index has the following fields available for searching and analysis in Kibana
+
+```
+"Name","Address","date_ts","Message","Attachment","iMessage"
+"Me","+1 555-555-5555","7/17/2016 9:21:39 AM","How are you doing?","","True"
+"Joe Smith","+1 555-444-4444","7/17/2016 9:38:56 AM","Pretty good you?","","True"
+"Me","+1 555-555-5555","7/17/2016 9:39:02 AM","Great!","","True"
+....
+```
+
+* date_ts (epoch_millis timestamp in GMT/UTC)
+* name
+* address
+* message
+* attachment
+* imessage
+
+*The above text messages export CSV is just an example.* The `csv2es` tool that is bundled with the toolbox *can import ANY data set you want* not just the example format above.
+
+# <a id="iphoneexample"></a>Example: Export text messages from Iphone
+
+Once Docker is available on your system, before you run `mbox-analyzer-toolbox` you need to have some data to analyze in CSV format. As an example, below is how to export text messages from an iphone to a CSV file.
+
+1. Export iphone messages using [iExplorer for mac or windows](https://macroplant.com/iexplorer/tutorials/how-to-transfer-and-backup-sms-and-imessages)
+
+2. Edit the generated CSV file and change the first row's header value of `"Time"` to `"date_ts"`, save and exit.
+
+2. Take note of the location of your *.csv* file as you will use it below when running the toolbox.
+
+## <a id="runningcsv"></a>Running: import CSV of text messages for analysis
+
+Before running the example below, you need [Docker](#dockersetup) installed.
+
+This example below is specifically for a CSV data file containing text message data exported using [IExplorer](https://macroplant.com/iexplorer)
+
+*Contents of data.csv*
+```
+"Name","Address","date_ts","Message","Attachment","iMessage"
+"Me","+1 555-555-5555","7/17/2016 9:21:39 AM","How are you doing?","","True"
+"Joe Smith","+1 555-444-4444","7/17/2016 9:38:56 AM","Pretty good you?","","True"
+"Me","+1 555-555-5555","7/17/2016 9:39:02 AM","Great!","","True"
+....
+```
+
+*Contents of csvdata.mapping.json*
+```
+{
+    "dynamic": "true",
+    "properties": {
+        "date_ts": {"type": "date" },
+        "name": {"type": "string", "index" : "not_analyzed"},
+        "address": {"type": "string", "index" : "not_analyzed"},
+        "imessage": {"type": "string", "index" : "not_analyzed"}
+    }
+}
+```
+
+Bring up a terminal or command prompt on your computer and run the following, before doing so, you need to replace `PATH/TO/YOUR/data.csv`, `PATH/TO/YOUR/csvdata.mapping.json` and `PATH/TO/ELASTICSEARCH_DATA_DIR` below with the proper paths on your local system as appropriate.
+
+*Note: if using Docker Toolbox for Windows*: All of the mounted volumes below should live somewhere under your home directory under `c:\Users\[your username]\...` due to permissions issues.
+
+```
+docker run --rm -ti -p 5601:5601 \
+  -v PATH/TO/YOUR/data.csv:/toolbox/data.csv \
+  -v PATH/TO/YOUR/csvdata.mapping.json:/toolbox/csvdata.mapping.json \
+  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
+  mbox-analyzer-toolbox:latest \
+  python /toolbox/csv2es/csv2es.py \
+    [--existing-index \]
+    [--delete-index \]
+	 --index-name comm_data \
+	 --doc-type txtmsg \
+	 --mapping-file /toolbox/csvdata.mapping.json \
+	 --import-file /toolbox/data.csv \
+	 --delimiter ',' \
+	 --csv-clean-fieldnames \
+	 --csv-date-field date_ts \
+	 --csv-date-field-gmt-offset -1
+```
+
+If running against a pre-existing `comm_data` index make sure to include the `--existing-index` flag only. If you want to re-create the `comm_data` index prior to import, include the `--delete-index` flag only.
+
+The console will log output of what is going on, when the system is booted up you can bring up a web browser on your desktop and go to *http://localhost:5601* to start using Kibana to analyze your data. *Note: if running docker toolbox; 'localhost' might not work, execute a `docker-machine env default` to determine your docker hosts IP address, then go to http://[machine-ip]:5601"*
+
+On the first screen that says `Configure an index pattern`, in the field labeled `Index name or pattern` you type `comm_data` you will then see the `date_ts` field auto-selected, then hit the `Create` button. From there Kibana is ready to use!
+
+Launching does several things in the following order
+
+1. Starts ElasticSearch (where your indexed CSV data is stored)
+2. Starts Kibana (the user-interface to query the index)
+3. Starts the CSV file importer
+
+When then mbox importer is running you will see the following entries in the logs as the system does its work importing your mail from the mbox files
+
+## <a id="csvoptions"></a>Toolbox CSV import options
+
+When running the `mbox-analyzer-toolbox` image, one of the arguments is to invoke the [csv2es](https://github.com/bitsofinfo/csv2es) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
+
+```
+Usage: /toolbox/csv2es/csv2es.py [OPTIONS]
+
+  Bulk import a delimited file into a target Elasticsearch instance. Common
+  delimited files include things like CSV and TSV.
+
+  Load a CSV file:
+    csv2es --index-name potatoes --doc-type potato --import-file potatoes.csv
+
+  For a TSV file, note the tab delimiter option
+    csv2es --index-name tomatoes --doc-type tomato --import-file tomatoes.tsv --tab
+
+  For a nifty pipe-delimited file (delimiters must be one character):
+    csv2es --index-name pipes --doc-type pipe --import-file pipes.psv --delimiter '|'
+
+Options:
+  --index-name TEXT               Index name to load data into
+                                  [required]
+  --doc-type TEXT                 The document type (like user_records)
+                                  [required]
+  --import-file TEXT              File to import (or '-' for stdin)
+                                  [required]
+  --mapping-file TEXT             JSON mapping file for index
+  --delimiter TEXT                The field delimiter to use, defaults to CSV
+  --tab                           Assume tab-separated, overrides delimiter
+  --host TEXT                     The Elasticsearch host
+                                  (http://127.0.0.1:9200/)
+  --docs-per-chunk INTEGER        The documents per chunk to upload (5000)
+  --bytes-per-chunk INTEGER       The bytes per chunk to upload (100000)
+  --parallel INTEGER              Parallel uploads to send at once, defaults
+                                  to 1
+  --delete-index                  Delete existing index if it exists
+  --existing-index                Don't create index.
+  --quiet                         Minimize console output
+  --csv-clean-fieldnames          Strips double quotes and lower-cases all CSV
+                                  header names for proper ElasticSearch
+                                  fieldnames
+  --csv-date-field TEXT           The CSV header name that represents a date
+                                  string to parsed (via python-dateutil) into
+                                  an ElasticSearch epoch_millis
+  --csv-date-field-gmt-offset INTEGER
+                                  The GMT offset for the csv-date-field (i.e.
+                                  +/- N hours)
+  --version                       Show the version and exit.
+  --help                          Show this message and exit.
+```
+
+## <a id="analyzeonly"></a>Running: analyze previously imported data
+
+Running in this mode will just launch elasticsearch and kibana and will not import anything. It just brings up the
+toolbox so you can analyze previously imported data that resides in elasticsearch.
+
+*Note: if using Docker Toolbox for Windows*: All of the mounted volumes below should live somewhere under your home directory under `c:\Users\[your username]\...` due to permissions issues.
+
+```
+docker run --rm -ti -p 5601:5601 \
+  -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
+  mbox-analyzer-toolbox:latest \
+  analyze-only
+```
+
+## <a id="help"></a>Help/Resources
 
 ### Gmail
 * [Exporting Gmail](https://www.lifewire.com/how-to-export-your-emails-from-gmail-as-mbox-files-1171881)
 * [Gmail download  data](https://support.google.com/accounts/answer/3024190?hl=en)
+
+### IPhone text messages
+* [Exporting text messages from IPhone to CSV](https://macroplant.com/iexplorer/tutorials/how-to-transfer-and-backup-sms-and-imessages)
 
 ### Hotmail/Outlook
 
@@ -210,20 +392,6 @@ For hotmail/outlook, you need to export to PST, and then as a second step conver
 * [Kibana logz.io tutorial](https://logz.io/blog/kibana-tutorial/)
 * [Kibana search syntax](https://www.elastic.co/guide/en/kibana/current/search.html)
 
-## <a id="warn"></a> Expected warnings
-
-In the log output you may see warnings/errors like the following.
-
-They are expected and ok, they are simply warnings about some special characters that are not able to be decoded etc.
-
-```
-...
-/usr/lib/python2.7/site-packages/bs4/__init__.py:282: UserWarning: "https://someurl.com/whatever" looks like a URL. Beautiful Soup is not an HTTP client. You should probably use an HTTP client like requests to get the document behind the URL, and feed that document to Beautiful Soup.
-  ' that document to Beautiful Soup.' % decoded_markup
-[W 170825 18:41:56 dammit:381] Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER.
-[W 170825 18:41:56 dammit:381] Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER.
-...
-```
 
 ## <a id="security"></a> Security/Privacy
 

@@ -1,18 +1,18 @@
 FROM centos:latest
 
+EXPOSE 9200
 EXPOSE 5601
 
 ENV ES_VERSION 5.6.0
 ENV KIBANA_VERSION 5.6.0
 
 RUN yum -y install epel-release && yum clean all
-RUN yum -y install zip unzip curl git java-1.8.0-openjdk python python-pip && yum clean all
+RUN yum -y install unzip zip curl git java-1.8.0-openjdk python python-pip && yum clean all
 
-RUN pip install beautifulsoup4
-RUN pip install tornado
+RUN pip install --upgrade pip
+RUN pip install beautifulsoup4 python-dateutil tornado retrying pyelasticsearch joblib click
 
 RUN mkdir /toolbox
-
 ADD kibana.yml /toolbox
 RUN useradd -r elasticsearch
 
@@ -31,6 +31,7 @@ RUN cd /toolbox && \
     chown -R elasticsearch kibana-${KIBANA_VERSION}-linux-x86_64
 
 RUN cd /toolbox && git clone https://github.com/oliver006/elasticsearch-gmail.git
+RUN cd /toolbox && git clone https://github.com/bitsofinfo/csv2es.git
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
