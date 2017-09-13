@@ -65,7 +65,7 @@ If you see this error when starting the toolbox (the error is reported from Elas
 
 `sysctl -w vm.max_map_count=262144`
 
-If you are using Docker Toolbox, you have to first shell into the boot2docker VM first with `docker ssh default` to run this command.
+If you are using Docker Toolbox, you have to first shell into the boot2docker VM first with `docker ssh default` to run this command. Or do the following to make it permanent: https://github.com/docker/machine/issues/3859
 
 ## <a id="mboxsummary"></a>MBOX import summary
 
@@ -282,7 +282,7 @@ docker run --rm -ti -p 5601:5601 \
 	 --delimiter ',' \
 	 --csv-clean-fieldnames \
 	 --csv-date-field date_ts \
-	 --csv-date-field-gmt-offset -1 
+	 --csv-date-field-gmt-offset -1
 ```
 
 If running against a pre-existing `comm_data` index make sure to include the `--existing-index` flag only. If you want to re-create the `comm_data` index prior to import, include the `--delete-index` flag only.
