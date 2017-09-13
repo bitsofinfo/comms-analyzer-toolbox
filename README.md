@@ -282,7 +282,7 @@ docker run --rm -ti -p 5601:5601 \
 	 --delimiter ',' \
 	 --csv-clean-fieldnames \
 	 --csv-date-field date_ts \
-	 --csv-date-field-gmt-offset -1
+	 --csv-date-field-gmt-offset -1 
 ```
 
 If running against a pre-existing `comm_data` index make sure to include the `--existing-index` flag only. If you want to re-create the `comm_data` index prior to import, include the `--delete-index` flag only.
@@ -346,6 +346,8 @@ Options:
   --csv-date-field-gmt-offset INTEGER
                                   The GMT offset for the csv-date-field (i.e.
                                   +/- N hours)
+  --tags TEXT                     Custom static key1=val1,key2=val2 pairs to
+                                  tag all entries with
   --version                       Show the version and exit.
   --help                          Show this message and exit.
 ```
