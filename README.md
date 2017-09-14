@@ -126,6 +126,8 @@ docker run --rm -ti -p 5601:5601 \
   --infile=/toolbox/email.mbox \
   --init=[True | False] \
   --index-bodies=True \
+  --index-bodies-ignore-content-types application,image \
+  --index-bodies-html-parser html5lib \
   --index-name=comm_data
 ```
 
@@ -168,8 +170,21 @@ Options:
   --es-url                         URL of your Elasticsearch node (default
                                    http://localhost:9200)
   --index-bodies                   Will index all body content, stripped of
-                                   HTML/CSS/JS etc. Adds fields: 'body' and
-                                   'body_size' (default False)
+                                   HTML/CSS/JS etc. Adds fields: 'body',
+                                   'body_size' and 'body_filenames' for any
+                                   multi-part attachments (default False)
+  --index-bodies-html-parser       The BeautifulSoup parser to use for
+                                   HTML/CSS/JS stripping. Valid values
+                                   'html.parser', 'lxml', 'html5lib' (default
+                                   html.parser)
+  --index-bodies-ignore-content-types
+                                   If --index-bodies enabled, optional list of
+                                   body 'Content-Type' header keywords to match
+                                   to ignore and skip decoding/indexing. For
+                                   all ignored parts, the content type will be
+                                   added to the indexed field
+                                   'body_ignored_content_types' (default
+                                   application,image)
   --index-name                     Name of the index to store your messages
                                    (default gmail)
   --infile                         The mbox input file
