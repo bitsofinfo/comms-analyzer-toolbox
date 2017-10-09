@@ -154,7 +154,7 @@ When then mbox importer is running you will see the following entries in the log
 
 ## <a id="mboxoptions"></a>Toolbox MBOX import options
 
-When running the `comms-analyzer-toolbox` image, one of the arguments is to invoke the [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
+When running the `comms-analyzer-toolbox` image, one of the arguments is to invoke the [elasticsearch-gmail](https://github.com/bitsofinfo/elasticsearch-gmail) script which takes the following arguments. You can adjust the `docker run` command above to pass the following flags as you please:
 
 ```
 Usage: /toolbox/elasticsearch-gmail/src/index_emails.py [OPTIONS]
