@@ -23,6 +23,9 @@ RUN cd /toolbox && \
     ln -s elasticsearch-${ES_VERSION} elasticsearch && \
     chown -R elasticsearch elasticsearch-${ES_VERSION}
 
+# our entrypoint.sh sets and can override this
+RUN sed -i '/-Xm[xs]/s/^/#/' /toolbox/elasticsearch/config/jvm.options
+
 RUN cd /toolbox && \
     curl -O https://artifacts.elastic.co/downloads/kibana/kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz && \
     tar -xvf kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz && \

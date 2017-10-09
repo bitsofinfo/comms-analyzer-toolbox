@@ -381,6 +381,9 @@ docker run --rm -ti -p 5601:5601 \
   analyze-only
 ```
 
+Want to control the default ElasticSearch JVM memory heap options you can do so via
+a docker environment variable i.e. `-e ES_JAVA_OPTS="-Xmx1g -Xms1g"` etc.
+
 ## <a id="help"></a>Help/Resources
 
 ### Gmail

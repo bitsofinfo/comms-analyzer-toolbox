@@ -1,9 +1,18 @@
 #!/bin/bash
 
+if [ -z "$ES_JAVA_OPTS" ]; then
+  # if not set just use ES defaults (that were formally in jvm.options see Dockerfile)
+  export ES_JAVA_OPTS="-Xmx2g -Xms2g"
+else
+  echo
+  echo "using: ES_JAVA_OPTS=$ES_JAVA_OPTS"
+fi
+
+
 echo
 echo "Starting ElasticSearch.... please wait"
 echo
-su -c "nohup /toolbox/elasticsearch/bin/elasticsearch -d -Enetwork.host=0.0.0.0 &>/toolbox/elasticsearch/elasticsearch.log &" -s /bin/bash elasticsearch
+su -c "export ES_JAVA_OPTS='$ES_JAVA_OPTS'; nohup /toolbox/elasticsearch/bin/elasticsearch -d -Enetwork.host=0.0.0.0 &>/toolbox/elasticsearch/elasticsearch.log &" -s /bin/bash elasticsearch
 sleep 10
 timeout 30 tail -f /toolbox/elasticsearch/logs/elasticsearch.log
 
@@ -63,6 +72,12 @@ else
   echo
 fi
 
+echo
+echo "ElasticSearch and Kibana processes....."
+ps aux | grep 'java\|kibana'
+
+echo
+echo 
 echo "In your web browser go to http://localhost:5601"
 echo ""
 echo "On the first screen that says 'Configure an index pattern', in the field labeled 'Index name or pattern' type 'mbox'"
