@@ -24,7 +24,7 @@ Docker image that provides a simplified toolset for the import and analysis of c
 
 This project manages a Dockerfile to produce an image that when run starts both ElasticSearch and Kibana and then optionally imports communications data using the the following tools bundled within the container:
 
-* [elasticsearch-gmail](https://github.com/oliver006/elasticsearch-gmail) python scripts which import email data from an MBOX file.
+* [elasticsearch-gmail](https://github.com/bitsofinfo/elasticsearch-gmail) python scripts which import email data from an MBOX file.
 * [csv2es](https://github.com/bitsofinfo/csv2es) python scripts which can import any data from an CSV file.
 
 From there... well, you can analyze and visualize practically anything about your communications. Enjoy.
