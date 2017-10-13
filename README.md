@@ -126,8 +126,8 @@ docker run --rm -ti -p 5601:5601 \
   --infile=/toolbox/email.mbox \
   --init=[True | False] \
   --index-bodies=True \
-  --index-bodies-ignore-content-types application,image \
-  --index-bodies-html-parser html5lib \
+  --index-bodies-ignore-content-types=application,image \
+  --index-bodies-html-parser=html5lib \
   --index-name=comm_data
 ```
 
