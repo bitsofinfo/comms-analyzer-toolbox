@@ -3,8 +3,8 @@ FROM centos:latest
 EXPOSE 9200
 EXPOSE 5601
 
-ENV ES_VERSION 5.6.2
-ENV KIBANA_VERSION 5.6.2
+ENV ES_VERSION 5.6.3
+ENV KIBANA_VERSION 5.6.3
 
 RUN yum -y install epel-release && yum clean all
 RUN yum -y install unzip zip curl git java-1.8.0-openjdk python python-pip && yum clean all
