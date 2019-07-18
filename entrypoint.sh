@@ -8,11 +8,10 @@ else
   echo "using: ES_JAVA_OPTS=$ES_JAVA_OPTS"
 fi
 
-
 echo
 echo "Starting ElasticSearch.... please wait"
 echo
-su -c "export ES_JAVA_OPTS='$ES_JAVA_OPTS'; nohup /toolbox/elasticsearch/bin/elasticsearch -d -Enetwork.host=0.0.0.0 &>/toolbox/elasticsearch/elasticsearch.log &" -s /bin/bash elasticsearch
+su -c "export ES_JAVA_OPTS='$ES_JAVA_OPTS'; nohup /toolbox/elasticsearch/bin/elasticsearch -d -Enetwork.host=0.0.0.0 &>/toolbox/elasticsearch/logs/elasticsearch.log &" -s /bin/bash elasticsearch
 sleep 10
 timeout 30 tail -f /toolbox/elasticsearch/logs/elasticsearch.log
 
