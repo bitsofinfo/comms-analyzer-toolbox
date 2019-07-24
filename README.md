@@ -118,7 +118,8 @@ Bring up a terminal or command prompt on your computer and run the following, be
 *Note: if using Docker Toolbox for Windows*: All of the mounted volumes below should live somewhere under your home directory under `c:\Users\[your username]\...` due to permissions issues.
 
 ```
-docker run --rm -ti -p 5601:5601 \
+docker run --rm -ti \
+   --ulimit nofile=65536:65536 \
   -v PATH/TO/YOUR/my-email.mbox:/toolbox/email.mbox \
   -v PATH/TO/ELASTICSEARCH_DATA_DIR:/toolbox/elasticsearch/data \
   comms-analyzer-toolbox:latest \
