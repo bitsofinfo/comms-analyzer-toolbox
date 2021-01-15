@@ -7,10 +7,10 @@ ENV ES_VERSION 7.2.0
 ENV KIBANA_VERSION 7.2.0
 
 RUN yum -y install epel-release && yum clean all
-RUN yum -y install unzip zip curl git java-1.8.0-openjdk python python-pip && yum clean all
+RUN yum -y install unzip zip curl git java-1.8.0-openjdk python38 python38-pip && yum clean all
 
-RUN pip install --upgrade pip
-RUN pip install beautifulsoup4 python-dateutil html5lib lxml tornado retrying pyelasticsearch joblib click
+RUN pip3 install --upgrade pip
+RUN pip3 install beautifulsoup4 python-dateutil html5lib lxml tornado retrying pyelasticsearch joblib click
 
 RUN mkdir /toolbox
 ADD kibana.yml /toolbox
