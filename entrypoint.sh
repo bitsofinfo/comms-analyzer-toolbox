@@ -36,7 +36,7 @@ if [[ "$command" == "python" && "$script" == "/toolbox/elasticsearch-gmail/src/i
 
   # launch it!
   args=( "$@" )
-  python /toolbox/elasticsearch-gmail/src/index_emails.py ${args[@]:2}
+  python3 /toolbox/elasticsearch-gmail/src/index_emails.py ${args[@]:2}
 
   echo ""
   echo "MBOX email indexing is complete!"
@@ -48,7 +48,7 @@ elif [[ "$command" == "python" && "$script" == "/toolbox/csv2es/csv2es.py" ]]; t
   echo
 
   args=( "$@" )
-  python /toolbox/csv2es/csv2es.py ${args[@]:2}
+  python3 /toolbox/csv2es/csv2es.py ${args[@]:2}
 
   echo ""
   echo "CSV indexing is complete!"
