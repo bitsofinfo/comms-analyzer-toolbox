@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM rockylinux:latest
 
 EXPOSE 9200
 EXPOSE 5601
@@ -6,8 +6,8 @@ EXPOSE 5601
 ENV ES_VERSION 7.2.0
 ENV KIBANA_VERSION 7.2.0
 
-RUN yum -y install epel-release && yum clean all
-RUN yum -y install unzip zip curl git java-1.8.0-openjdk python2 python2-pip && yum clean all
+RUN dnf -y install epel-release && dnf clean all
+RUN dnf -y install unzip zip curl git java-1.8.0-openjdk python2 python2-pip && dnf clean all
 
 RUN pip2 install --upgrade pip
 RUN pip2 install beautifulsoup4 python-dateutil html5lib lxml tornado retrying pyelasticsearch joblib click chardet
