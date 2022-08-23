@@ -1,4 +1,4 @@
-FROM rockylinux:latest
+FROM rockylinux:9
 
 EXPOSE 9200
 EXPOSE 5601
