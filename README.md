@@ -1,6 +1,6 @@
 # comms-analyzer-toolbox
 
-Docker image that provides a simplified toolset for the import and analysis of communications content from email [MBOX](https://en.wikipedia.org/wiki/Mbox) files, and other CSV data (such as text messages) using Elasticsearch and Kibana. This provides a single command that launches a full analytical software stack as well as imports all of your communications into it, ready for analysis w/ Kibana and ElasticSearch.
+Docker image that provides a simplified OSINT toolset for the import and analysis of communications content from email [MBOX](https://en.wikipedia.org/wiki/Mbox) files, and other CSV data (such as text messages) using Elasticsearch and Kibana. This provides a single command that launches a full OSINT analytical software stack as well as imports all of your communications into it, ready for analysis w/ Kibana and ElasticSearch.
 
 * [Summary](#summary)
 * [Docker setup](#dockersetup)
